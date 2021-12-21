@@ -242,7 +242,7 @@ void Fit(std::string inName){
 	std::cout << "resolution: " << resolution << std::endl;
 
 
-	TH1D *h1 = new TH1D("charge", "charge", 500, -50, 200); // define histogram 
+	TH1D *h1 = new TH1D("charge", "charge", 500, -50, 400); // define histogram 
 	h1->GetXaxis()->SetTitle("Integrated Voltage [mV]");
 
 	for (int i = 0; i < tWaves->GetEntries(); i++){ // fill histogram
@@ -324,8 +324,8 @@ void Fit(std::string inName){
 
 	pmt->SetParLimits(0,-3,3);
 	pmt->SetParLimits(1,0,30);
-	pmt->SetParLimits(2,0,40);
-	pmt->SetParLimits(3,0,10);
+	pmt->SetParLimits(2,0,170);//new digital, original is 40
+	pmt->SetParLimits(3,0,70);//new digital, original is 10
 	pmt->SetParLimits(4,0.,1);
 	pmt->SetParLimits(5,0.,1);
 	pmt->SetParLimits(6,0.001,1.5000);
@@ -354,7 +354,7 @@ void Fit(std::string inName){
 
 
 	double voltage = (pmt->GetParameter(2))*1e-3; 
-	double timeb = 4e-9; // time per bin
+	double timeb = 1e-9; // time per bin
 	double charge = timeb*voltage/50;
 	double e = 1.6e-19;
 	double gain = charge/e;
