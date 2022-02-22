@@ -106,7 +106,7 @@ void ProcessWaveform(std::vector<float> *wx, std::vector<float> *wy, float &totC
 
  void Plot(){
 	 
-	TFile *input = new TFile ("/mnt/lustre/groups/nms_epapg/k20043567/PMT_OD/Data/pmt_data_202111/NNVT/NNVT2/waveform_20211118/NNVT2_1550V_10m_LEDON7.root", "READ");
+	TFile *input = new TFile ("/mnt/lustre/groups/nms_epapg/k20043567/PMT_OD/Data/pmt_data_202112/NNVT034077/NNVT034077_1100V_10m_DR_A_cooldown26h.root", "READ");
 	TTree *tDevice = (TTree*) input->Get("device");
 	TTree *tWaves = (TTree*) input->Get("data");
 
@@ -135,7 +135,7 @@ void ProcessWaveform(std::vector<float> *wx, std::vector<float> *wy, float &totC
 	float adcFactor = (voltHigh - voltLow)*1000/resolution;
 
 //	std::cout << "AAAA" << std::endl;
-	TFile *output = new TFile ("NNVT_1550V_10m_LED7_waveform.root", "RECREATE");
+	TFile *output = new TFile ("NNVT034077_1100V_10m_DR_A_cooldown26h_waveform.root", "RECREATE");
 	output->cd();
 	// Now we loop over the events
 	for (int c = 0; c < tWaves->GetEntries(); c++){
@@ -152,7 +152,7 @@ void ProcessWaveform(std::vector<float> *wx, std::vector<float> *wy, float &totC
                 float timePeak = 0;
 
                 ProcessWaveform(wavex, wavey, totCharge, timePeak, frequency, adcFactor);
-                if (totCharge > 112.4 && totCharge < 132.4){ 
+                if (totCharge > 14){ 
 
 		TGraph *g = new TGraph;
 		g->GetYaxis()->SetRangeUser(0,100);
@@ -160,10 +160,8 @@ void ProcessWaveform(std::vector<float> *wx, std::vector<float> *wy, float &totC
 		std::cout << "size:\t" << wavex->size() << std::endl;
 		std::cout << c << "th event" << std::endl;
 		for (int i = 0; i < wavex->size(); i++){
-			g->SetPoint (i, 0.5*wavex->at(i), adcFactor*wavey->at(i));		
+			g->SetPoint (i, wavex->at(i), wavey->at(i));		
 		}
-		g->GetYaxis()->SetTitle("Voltage [mV]");
-		g->GetXaxis()->SetTitle("Time [ns]");
 		// budget way to show it in a nice scale
 //		g->SetPoint(wavex->size(), 150, 0);
 //		g->SetPoint(wavex->size()+1, 151, 100);
